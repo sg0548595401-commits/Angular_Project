@@ -1,0 +1,33 @@
+<div class="page-container">
+
+  <header class="projects-header">
+    <h1>כל הפרויקטים 📂</h1>
+
+    <div class="search-box">
+      <input type="text" [formControl]="searchControl" (input)="onSearch($event)" placeholder="חפש פרויקט...">
+      <span class="search-icon">🔍</span>
+    </div>
+  </header>
+
+  <main class="projects-grid">
+
+    @for (project of filteredProjects(); track project.id) {
+
+    <div class="project-card">
+      <h3>{{ project.name }}</h3>
+      <p>{{ project.description || 'אין תיאור לפרויקט' }}</p>
+
+      <button [routerLink]="['/projects', project.id, 'tasks']">
+        כנס למשימות ➜
+      </button>
+
+    </div>
+
+    } @empty {
+    <div class="empty-state">
+      <p>לא נמצאו פרויקטים תואמים 😕</p>
+    </div>
+    }
+
+  </main>
+</div>

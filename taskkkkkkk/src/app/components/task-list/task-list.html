@@ -1,0 +1,174 @@
+<div class="page-container">
+
+  @if (errorMessage()) {
+  <div class="error-banner">
+    <p>❌ {{ errorMessage() }}</p>
+    <button (click)="errorMessage.set(null)">✖</button>
+  </div>
+  }
+
+  <header class="tasks-header">
+    <div class="header-start">
+      <a [routerLink]="['/projects', projectId()]" class="back-btn">⬅️</a>
+      <h1>לוח משימות 📋</h1>
+    </div>
+    <button (click)="openCreate()" class="circle-btn">➕</button>
+  </header>
+
+  @if (tasksService.error()) { <div class="error-banner">{{ tasksService.error() }}</div> }
+  @if (tasksService.isLoading()) { <p>טוען...</p> }
+    <div class="search-box">
+      <input type="text" placeholder="חפש משימה בלוח..." (input)="onSearch($event)">
+    </div>
+  <div class="board" cdkDropListGroup>
+
+    <div class="board-column">
+      <div class="column-header header-todo">
+        <h2>לביצוע 🔴</h2>
+        <span class="count">{{ todoTasks().length }}</span>
+      </div>
+
+      <div class="task-list" cdkDropList id="todo" [cdkDropListData]="todoTasks()" (cdkDropListDropped)="drop($event)">
+
+        @for (task of todoTasks(); track task.id) {
+        <div class="task-card" cdkDrag [cdkDragData]="task">
+          <div class="task-content" (click)="openEdit(task)">
+            <h3>{{ task.title }}</h3>
+            <div>{{ task.description }}</div>
+            <button class="delete-btn-small" (click)="onDeleteTask(task); $event.stopPropagation()">
+              🗑️
+            </button>
+            <select class="priority-select {{ task.priority }}" [value]="task.priority"
+              (change)="onPriorityChange(task, $event)" (click)="$event.stopPropagation()">
+              <option value="low">Low</option>
+              <option value="normal">Normal</option>
+              <option value="high">High</option>
+            </select>
+          </div>
+        </div>
+        }
+      </div>
+    </div>
+
+    <div class="board-column">
+      <div class="column-header header-progress">
+        <h2>בביצוע 🔵</h2>
+        <span class="count">{{ inProgressTasks().length }}</span>
+      </div>
+
+      <div class="task-list" cdkDropList id="in_progress" [cdkDropListData]="inProgressTasks()"
+        (cdkDropListDropped)="drop($event)">
+
+        @for (task of inProgressTasks(); track task.id) {
+        <div class="task-card" cdkDrag [cdkDragData]="task">
+          <div class="task-content" (click)="openEdit(task)">
+            <h3>{{ task.title }}</h3>
+            <div>{{ task.description }}</div>
+
+            <button class="delete-btn-small" (click)="onDeleteTask(task); $event.stopPropagation()">
+              🗑️
+            </button>
+            <select class="priority-select {{ task.priority }}" [value]="task.priority"
+              (change)="onPriorityChange(task, $event)" (click)="$event.stopPropagation()">
+              <option value="low">Low</option>
+              <option value="normal">Normal</option>
+              <option value="high">High</option>
+            </select>
+          </div>
+        </div>
+        }
+      </div>
+    </div>
+
+    <div class="board-column">
+      <div class="column-header header-done">
+        <h2>בוצע 🟢</h2>
+        <span class="count">{{ doneTasks().length }}</span>
+      </div>
+
+      <div class="task-list" cdkDropList id="done" [cdkDropListData]="doneTasks()" (cdkDropListDropped)="drop($event)">
+
+        @for (task of doneTasks(); track task.id) {
+        <div class="task-card done-card" cdkDrag [cdkDragData]="task">
+          <div class="task-content" (click)="openEdit(task)">
+            <h3>{{ task.title }}</h3>
+            <div>{{ task.description }}</div>
+
+            <button class="delete-btn-small" (click)="onDeleteTask(task); $event.stopPropagation()">
+              🗑️
+            </button>
+            <select class="priority-select {{ task.priority }}" [value]="task.priority"
+              (change)="onPriorityChange(task, $event)" (click)="$event.stopPropagation()">
+              <option value="low">Low</option>
+              <option value="normal">Normal</option>
+              <option value="high">High</option>
+            </select>
+          </div>
+        </div>
+        }
+      </div>
+    </div>
+
+  </div>
+
+
+  @if (isCreateOpen()) {
+  <div class="modal-overlay" (click)="closeModal()">
+
+    <div class="modal-box big-modal" (click)="$event.stopPropagation()">
+
+      <header class="modal-header">
+        <h2>
+          {{ editingTaskId() ? 'עריכת משימה ✏️' : 'משימה חדשה ✨' }}
+        </h2>
+        <button class="close-btn" (click)="closeModal()">✖</button>
+      </header>
+
+      <div class="modal-body-layout">
+
+        <div class="form-column">
+          <form [formGroup]="taskForm">
+
+            <label>כותרת המשימה</label>
+            <input type="text" formControlName="title" placeholder="לדוגמה: עיצוב דף הבית...">
+
+            <label>תיאור מלא</label>
+            <textarea formControlName="description" rows="5" placeholder="פרט מה צריך לעשות..."></textarea>
+
+            <div class="row-inputs">
+              <div class="input-group">
+                <label>עדיפות</label>
+                <select formControlName="priority">
+                  <option value="low">נמוכה 🟢</option>
+                  <option value="normal">רגילה 🔵</option>
+                  <option value="high">גבוהה 🔴</option>
+                </select>
+              </div>
+            </div>
+
+          </form>
+
+          <div class="modal-actions">
+            @if (editingTaskId()) {
+            <button class="delete-btn-text" (click)="selectedTask() && onDeleteTask(selectedTask()!)">
+              מחק משימה 🗑️
+            </button>
+            }
+            <button class="save-btn" (click)="saveTask()" [disabled]="taskForm.invalid">
+              {{ editingTaskId() ? 'שמור שינויים' : 'צור משימה' }}
+            </button>
+          </div>
+        </div>
+
+        @if (editingTaskId()) {
+        <div class="chat-column">
+          <app-comments [selectedTask]="selectedTask()"></app-comments>
+        </div>
+        }
+
+      </div>
+    </div>
+  </div>
+  }
+
+</div>

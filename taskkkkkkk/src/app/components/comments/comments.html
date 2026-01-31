@@ -1,0 +1,43 @@
+<div class="comments-container">
+  <div class="comments-header">
+    <h3>תגובות ועדכונים 💬</h3>
+    <span class="comment-count">{{ commentsService.currentComments().length }}</span>
+  </div>
+
+  @if (commentsService.loadingError()) {
+  <div class="error-banner">
+    <p>⚠️ {{ commentsService.loadingError() }}</p>
+  </div>
+  }
+
+  <div class="comments-list">
+    @for (comment of commentsService.currentComments(); track comment.id) {
+    <div class="comment-item">
+      <div class="comment-header">
+        <strong class="author">{{ comment.author_name }}</strong>
+        <span class="timestamp">{{ comment.created_at | date:'HH:mm, dd/MM/yyyy' }}</span>
+      </div>
+      <p class="comment-body">{{ comment.body }}</p>
+    </div>
+    } @empty {
+    <div class="empty-state">
+      <p>אין עדיין תגובות. תהיה הראשון להגיב! 👇</p>
+    </div>
+    }
+  </div>
+
+  @if (selectedTask && !commentsService.loadingError()) {
+  <div class="comment-input-area">
+    <input 
+      type="text" 
+      [formControl]="commentControl" 
+      (keydown.enter)="sendComment()"
+      placeholder="כתוב תגובה..."
+      class="comment-input"
+    >
+    <button (click)="sendComment()" class="send-btn" [disabled]="!commentControl.value">
+      🚀
+    </button>
+  </div>
+  }
+</div>

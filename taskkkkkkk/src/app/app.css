@@ -1,0 +1,253 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Toolbar Material Styling */
+.app-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.toolbar-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0 16px;
+  height: 100%;
+}
+
+.toolbar-start {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1;
+}
+
+.toolbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: white;
+  text-decoration: none;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  transition: var(--transition);
+  border-radius: var(--radius-small);
+  padding: 8px 12px;
+}
+
+.toolbar-brand:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.brand-icon {
+  font-size: 28px;
+  width: 28px;
+  height: 28px;
+}
+
+.brand-text {
+  display: none;
+}
+
+.desktop-nav {
+  display: flex;
+  gap: 8px;
+  flex: 1;
+  justify-content: center;
+}
+
+.desktop-nav [mat-button] {
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+}
+
+.desktop-nav [mat-button] mat-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+.desktop-nav [mat-button]:not(.active-link) {
+  opacity: 0.8;
+}
+
+.desktop-nav [mat-button].active-link {
+  background-color: rgba(255, 255, 255, 0.2);
+  font-weight: 600;
+}
+
+.toolbar-end {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1;
+  justify-content: flex-end;
+}
+
+.user-greeting {
+  color: white;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.logout-btn {
+  color: white;
+  transition: var(--transition);
+}
+
+.logout-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.mobile-menu-btn {
+  display: none;
+  color: white;
+}
+
+.mobile-menu {
+  display: none;
+  background-color: #303f9f;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 8px 0;
+  animation: slideDown 0.3s ease-out;
+}
+
+.mobile-menu [mat-button] {
+  width: 100%;
+  justify-content: flex-start;
+  color: white;
+  padding-right: 16px;
+}
+
+.mobile-menu [mat-button] mat-icon {
+  margin-left: 12px;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.main-content {
+  flex: 1;
+  overflow-y: auto;
+  background-color: var(--surface);
+  padding: 24px;
+}
+
+/* Responsive Design */
+@media (max-width: 960px) {
+  .toolbar-brand {
+    flex: 1;
+  }
+
+  .brand-text {
+    display: inline;
+    font-size: 16px;
+  }
+
+  .desktop-nav {
+    display: none;
+  }
+
+  .mobile-menu-btn {
+    display: block;
+  }
+
+  .user-greeting {
+    display: none;
+  }
+
+  .main-content {
+    padding: 16px;
+  }
+
+  .mobile-menu[style*="display"] {
+    display: flex !important;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 600px) {
+  .toolbar-start {
+    gap: 8px;
+  }
+
+  .toolbar-brand {
+    padding: 6px 8px;
+  }
+  .logout-btn {
+    transform: scale(0.9);
+  }
+
+  .main-content {
+    padding: 12px;
+  }
+}
+
+.nav-user {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.user-name {
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.logout-btn {
+  background: transparent;
+  border: 1px solid #ff6b6b;
+  color: #ff6b6b;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.2s ease;
+}
+
+.logout-btn:hover {
+  background-color: #ff6b6b;
+  color: white;
+}
+
+/* רווח לתוכן הראשי שלא יידבק לסרגל */
+.main-content {
+  padding: 0;
+}
+
+.nav-brand {
+  font-size: 1.4rem;
+  font-weight: 700;
+  text-decoration: none; /* שלא יהיה קו תחתון */
+  color: white;
+  cursor: pointer;
+}
+
+/* סתם עיצוב ללינק שעדיין לא עובד */
+.disabled-link {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

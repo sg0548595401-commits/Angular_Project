@@ -1,0 +1,56 @@
+<div class="app-container">
+  @if (authService.currentUser()) {
+    <mat-toolbar color="primary" class="app-toolbar">
+      <div class="toolbar-content">
+        <div class="toolbar-start">
+          <button mat-icon-button (click)="toggleMobileMenu()" class="mobile-menu-btn">
+            <mat-icon>menu</mat-icon>
+          </button>
+          <a routerLink="/teams" class="toolbar-brand">
+            <mat-icon class="brand-icon">task_alt</mat-icon>
+            <span class="brand-text">TaskManager</span>
+          </a>
+        </div>
+
+        <nav class="desktop-nav">
+          <a mat-button routerLink="/teams" routerLinkActive="active-link">
+            <mat-icon>groups</mat-icon>
+            <span>הצוותים שלי</span>
+          </a>
+          <a mat-button routerLink="/all-projects" routerLinkActive="active-link">
+            <mat-icon>folder_special</mat-icon>
+            <span>כל הפרויקטים</span>
+          </a>
+        </nav>
+
+        <div class="toolbar-end">
+          <span class="user-greeting">היי, {{ cleanUserName(authService.currentUser()?.name) }}</span>
+          <button 
+            mat-icon-button 
+            (click)="authService.logout()"
+            matTooltip="יציאה"
+            class="logout-btn">
+            <mat-icon>logout</mat-icon>
+          </button>
+        </div>
+      </div>
+    </mat-toolbar>
+
+    @if (isMobileMenuOpen()) {
+      <div class="mobile-menu">
+        <a mat-button routerLink="/teams" (click)="closeMobileMenu()" routerLinkActive="active-link">
+          <mat-icon>groups</mat-icon>
+          הצוותים שלי
+        </a>
+        <a mat-button routerLink="/all-projects" (click)="closeMobileMenu()" routerLinkActive="active-link">
+          <mat-icon>folder_special</mat-icon>
+          כל הפרויקטים
+        </a>
+      </div>
+    }
+  }
+
+  <div class="main-content">
+    <router-outlet></router-outlet>
+  </div>
+</div>

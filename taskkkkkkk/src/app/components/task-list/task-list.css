@@ -1,0 +1,575 @@
+/* עיצוב ל-Select */
+select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-family: inherit;
+  background-color: white;
+  width: 100%; /* שיתפוס את כל הרוחב */
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.error-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  color: #721c24;
+  padding: 12px 16px;
+  border-radius: 6px;
+  margin: 0 16px;
+}
+
+.error-banner p {
+  margin: 0;
+  font-size: 14px;
+  flex: 1;
+}
+
+.error-banner button {
+  background: none;
+  border: none;
+  color: #721c24;
+  cursor: pointer;
+  font-size: 18px;
+  padding: 0;
+  margin-left: 12px;
+}
+
+/* ריווח קטן מעל התווית */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 10px;
+}
+
+label {
+  font-size: 0.9rem;
+  font-weight: bold;
+  color: #555;
+}
+/* סידור הכותרת והפח */
+.task-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start; /* חשוב כדי שהפח יהיה למעלה */
+  margin-bottom: 10px;
+}
+
+.task-header h3 {
+  margin: 0;
+  width: 85%;
+  word-wrap: break-word;
+}
+
+/* כפתור המחיקה */
+.delete-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  opacity: 0.5;
+  transition: opacity 0.2s;
+  padding: 0 5px;
+}
+
+.delete-btn:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+/* עיצוב הבחירה של הסטטוס */
+.status-select {
+  padding: 5px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background: white;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.status-select:hover {
+  border-color: #6200ea;
+}
+
+/* רווח בין האלמנטים */
+.task-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 15px;
+  border-top: 1px solid #eee;
+  padding-top: 10px;
+}
+/* --- עיצוב המודל (Popup) --- */
+
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.6); /* רקע כהה חצי שקוף */
+  backdrop-filter: blur(4px);      /* אפקט טשטוש מודרני לרקע */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.modal-box {
+  background: white;
+  padding: 2rem;
+  border-radius: 16px; /* פינות יותר עגולות */
+  width: 90%;
+  max-width: 450px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.3); /* צל עמוק ויפה */
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+/* אנימציית כניסה */
+@keyframes slideIn {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.slide-in {
+  animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-box h2 {
+  margin: 0 0 0.5rem 0;
+  color: #333;
+  text-align: center;
+}
+
+/* --- עיצוב השדות בתוך המודל --- */
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.input-group label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #555;
+}
+
+input, textarea, select {
+  padding: 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+  width: 100%;
+  box-sizing: border-box; /* חשוב כדי שלא יצא מהגבולות */
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: #6200ea;
+  box-shadow: 0 0 0 3px rgba(98, 0, 234, 0.1);
+}
+
+/* --- כפתורים במודל --- */
+.modal-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.save-btn {
+  flex: 2; /* הכפתור הראשי תופס יותר מקום */
+  background: #6200ea;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.save-btn:hover {
+  background: #5000ca;
+}
+
+.save-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.cancel-btn {
+  flex: 1;
+  background: #f5f5f5;
+  color: #333;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.cancel-btn:hover {
+  background: #e0e0e0;
+}
+
+/* --- כפתורי עריכה ומחיקה בכרטיסייה --- */
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+.icon-btn {
+  background: white;
+  border: 1px solid #eee;
+  border-radius: 6px;
+  padding: 4px 8px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: all 0.2s;
+}
+
+.edit-btn:hover {
+  background: #e3f2fd;
+  border-color: #2196f3;
+  transform: translateY(-2px);
+}
+
+.delete-btn:hover {
+  background: #ffebee;
+  border-color: #f44336;
+  transform: translateY(-2px);
+}
+/* הלוח שמחזיק את העמודות */
+.board {
+  display: flex; /* מסדר את העמודות בשורה */
+  gap: 20px;
+  overflow-x: auto; /* גלילה הצידה אם אין מקום */
+  padding-bottom: 20px;
+  align-items: flex-start; /* שיתחילו מלמעלה */
+  height: calc(100vh - 150px); /* תופס את רוב הגובה */
+}
+
+/* כל עמודה בנפרד */
+.board-column {
+  flex: 1; /* כל עמודה תופסת שליש */
+  min-width: 280px;
+  background: #f4f5f7; /* צבע אפור בהיר לרקע העמודה (כמו ב-Jira/Trello) */
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  max-height: 100%;
+}
+
+/* כותרת העמודה */
+.column-header {
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid rgba(0,0,0,0.05);
+}
+
+.column-header h2 {
+  font-size: 1rem;
+  margin: 0;
+  text-transform: uppercase;
+  color: #5e6c84;
+}
+
+.count {
+  background: #e0e0e0;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+/* אזור רשימת המשימות בתוך העמודה */
+.task-list {
+  padding: 10px;
+  flex-grow: 1;
+  min-height: 100px; /* חובה! שיהיה לאן לגרור גם אם ריק */
+  overflow-y: auto; /* גלילה פנימית בתוך העמודה */
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* עיצוב הכרטיסייה עצמה */
+.task-card {
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  cursor: grab; /* סמן של יד פתוחה */
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.task-card:active {
+  cursor: grabbing; /* יד סגורה בגרירה */
+}
+
+/* אפקט בזמן גרירה (אנגולר מוסיף את המחלקות האלו לבד) */
+.cdk-drag-preview {
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  border-radius: 8px;
+  background: white;
+}
+
+.cdk-drag-placeholder {
+  opacity: 0;
+}
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+/* העיצוב הבסיסי של תיבת העדיפות */
+.priority-select {
+  border: none;
+  border-radius: 4px;
+  padding: 2px 5px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  cursor: pointer;
+  outline: none;
+  text-transform: uppercase; /* הופך לאותיות גדולות באנגלית */
+  appearance: none; /* מסתיר את החץ המכוער של הדפדפן (בחלק מהדפדפנים) */
+  text-align: center;
+}
+
+/* צבעים לפי רמת דחיפות */
+.priority-select.high {
+  background-color: #ffebee;
+  color: #d32f2f;
+  border: 1px solid #ffcdd2;
+}
+
+.priority-select.normal {
+  background-color: #e3f2fd;
+  color: #1976d2;
+  border: 1px solid #bbdefb;
+}
+
+.priority-select.low {
+  background-color: #e8f5e9;
+  color: #388e3c;
+  border: 1px solid #c8e6c9;
+}
+
+/* כשעוברים עם העכבר */
+.priority-select:hover {
+  opacity: 0.8;
+}
+/* עיצוב הבחירה שתיראה כמו כפתור */
+.priority-select {
+  border: none;
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  cursor: pointer;
+  text-transform: uppercase;
+  text-align: center;
+  outline: none;
+  /* ביטול עיצוב ברירת מחדל של הדפדפן כדי שייראה נקי */
+  -webkit-appearance: none; 
+  -moz-appearance: none;
+  appearance: none; 
+}
+
+/* צבעים לפי רמת דחיפות (אותם צבעים כמו קודם) */
+.priority-select.high {
+  background-color: #ffebee;
+  color: #d32f2f;
+  border: 1px solid #ffcdd2;
+}
+
+.priority-select.normal {
+  background-color: #e3f2fd;
+  color: #1976d2;
+  border: 1px solid #bbdefb;
+}
+
+.priority-select.low {
+  background-color: #e8f5e9;
+  color: #388e3c;
+  border: 1px solid #c8e6c9;
+}
+
+/* אפקט קטן כשעוברים עם העכבר */
+.priority-select:hover {
+  opacity: 0.8;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+/* --- המודל הגדול --- */
+
+/* הרחבת המודל */
+.modal-box.big-modal {
+  width: 90%;
+  max-width: 900px; /* רחב הרבה יותר מקודם */
+  max-height: 85vh; /* שלא יחרוג מהגובה של המסך */
+  display: flex;
+  flex-direction: column;
+  padding: 0; /* אנחנו ניתן פדינג פנימי */
+  overflow: hidden; /* כדי שהגלילה תהיה בפנים */
+}
+
+.modal-header {
+  padding: 20px;
+  background: #f4f5f7;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* החלוקה לעמודות */
+.modal-body-layout {
+  display: flex;
+  flex: 1; /* תופס את שאר הגובה */
+  overflow: hidden; /* מונע גלילה כפולה */
+}
+
+/* --- עמודה ימנית: הטופס --- */
+.form-column {
+  flex: 1.2; /* הטופס מקבל קצת יותר מקום */
+  padding: 25px;
+  overflow-y: auto; /* גלילה רק לטופס אם צריך */
+  border-left: 1px solid #eee;
+}
+
+.form-column textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  resize: vertical;
+  font-family: inherit;
+}
+
+/* כפתור מחיקה עדין */
+.delete-btn-text {
+  background: none;
+  border: none;
+  color: #d32f2f;
+  cursor: pointer;
+  text-decoration: underline;
+  margin-left: auto; /* דוחף לצד */
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+}
+
+/* --- עמודה שמאלית: הצ'אט --- */
+.chat-column {
+  flex: 1; /* הצ'אט מקבל שליש מהמקום */
+  background-color: #f9f9fb;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #eee;
+}
+
+.chat-column h3 {
+  padding: 15px 20px;
+  margin: 0;
+  font-size: 1rem;
+  color: #5e6c84;
+  border-bottom: 1px solid #eee;
+  background: white;
+}
+
+/* רשימת ההודעות */
+.chat-messages {
+  flex: 1; /* תופס את כל הגובה הפנוי */
+  overflow-y: auto; /* גלילה פנימית לצ'אט! */
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.empty-chat {
+  text-align: center;
+  color: #888;
+  margin-top: 40px;
+  font-style: italic;
+}
+
+/* בועת הודעה */
+.message-bubble {
+  background: white;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border-bottom-right-radius: 2px; /* שפיץ קטן */
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  border: 1px solid #eee;
+}
+
+.message-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  margin-bottom: 4px;
+  color: #6b778c;
+}
+
+.message-body {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #172b4d;
+  line-height: 1.4;
+}
+
+/* אזור הכתיבה למטה */
+.chat-input-area {
+  padding: 15px;
+  background: white;
+  border-top: 1px solid #ddd;
+  display: flex;
+  gap: 10px;
+}
+
+.chat-input-area input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #dfe1e6;
+  border-radius: 20px;
+  outline: none;
+}
+
+.chat-input-area button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  transition: transform 0.2s;
+}
+
+.chat-input-area button:hover {
+  transform: scale(1.1);
+}
+
+/* --- התאמה לנייד --- */
+@media (max-width: 768px) {
+  .modal-body-layout {
+    flex-direction: column; /* בנייד זה יהיה אחד מתחת לשני */
+  }
+  
+  .chat-column {
+    border-top: 2px solid #ddd;
+    height: 400px; /* גובה קבוע לצ'אט בנייד */
+  }
+}
